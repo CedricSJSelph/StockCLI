@@ -1,5 +1,3 @@
-import java.util.*;
-
 public class StockInfo {
     float high;
     float low;
@@ -56,5 +54,13 @@ public class StockInfo {
 
     public void setVolume(double volume) {
         this.volume = volume;
+    }
+
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
     }
 }
