@@ -1,23 +1,16 @@
 import java.util.*;
-/*
 
-MSFT
---------
-Open: $121.66
-High: $122.43
-Low: $118.81
-Current: $121.58
-Volumne: 5346108
- */
 public class Main {
     public static void main(String[] args) {
         String Answer = null;
         System.out.println("Welcome to the CLI Stock Retriever");
-        do{
 
+        do{
             Scanner scan = new Scanner(System.in);
+
             System.out.print("What ticker would like info on? (Enter \"EXIT\" to stop): ");
             String Stock = scan.nextLine();
+
             if((Stock.equals("EXIT")) || (Stock.equals("exit"))) {
                 Answer = "EXIT";
             }else{
