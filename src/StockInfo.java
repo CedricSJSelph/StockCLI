@@ -7,12 +7,15 @@ public class StockInfo {
     float current;
     double volume;
 
-    public StockInfo(float high, float low, float open, float current, double volume) {
+    String Name;
+
+    public StockInfo(float high, float low, float open, float current, double volume, String Name) {
         this.high = high;
         this.low = low;
         this.open = open;
         this.current = current;
         this.volume = volume;
+        this.Name =Name;
     }
 
     public float getHigh() {
