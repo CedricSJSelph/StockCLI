@@ -1,13 +1,13 @@
 public class StockInfo {
-    float high;
-    float low;
-    float open;
-    float current;
+    double high;
+    double low;
+    double open;
+    double current;
     double volume;
 
     String Name;
 
-    public StockInfo(float high, float low, float open, float current, double volume, String Name) {
+    public StockInfo(double high, double low, double open, double current, double volume, String Name) {
         this.high = high;
         this.low = low;
         this.open = open;
@@ -16,7 +16,7 @@ public class StockInfo {
         this.Name =Name;
     }
 
-    public float getHigh() {
+    public double getHigh() {
         return high;
     }
 
@@ -24,7 +24,7 @@ public class StockInfo {
         this.high = high;
     }
 
-    public float getLow() {
+    public double getLow() {
         return low;
     }
 
@@ -32,7 +32,7 @@ public class StockInfo {
         this.low = low;
     }
 
-    public float getOpen() {
+    public double getOpen() {
         return open;
     }
 
@@ -40,7 +40,7 @@ public class StockInfo {
         this.open = open;
     }
 
-    public float getCurrent() {
+    public double getCurrent() {
         return current;
     }
 

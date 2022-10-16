@@ -15,56 +15,62 @@ public class Main {
             if((Stock.equals("EXIT")) || (Stock.equals("exit"))) {
                 Answer = "EXIT";
             }else{
-                String[] info = stockInformationAPI(Stock);
+                double[] info = stockInformationAPI(Stock);
                 StockInfo stock = new StockInfo(
-                        Float.parseFloat(info[0]), //Open
-                        Float.parseFloat(info[1]), //High
-                        Float.parseFloat(info[2]), //Low
-                        Float.parseFloat(info[3]), //Current
-                        Float.parseFloat(info[4]), //Volume
+                        info[0], //Open
+                        info[1], //High
+                        info[2], //Low
+                        info[3], //Current
+                        info[4], //Volume
                         Stock);                    //Name
 
                 System.out.println();
                 System.out.println(stock.getName());
                 System.out.println("~~~~~~~~~~~~~~~~~~~~");
-                System.out.println("Open: " + stock.getOpen());
-                System.out.println("High: " + stock.getHigh());
-                System.out.println("Low: " + stock.getLow());
-                System.out.println("Current: " + stock.getCurrent());
-                System.out.println("Volume: " + stock.getVolume());
+                System.out.printf("Open: %,.2f \n",stock.getOpen());// + stock.getOpen());
+                System.out.printf("High: %,.2f \n",stock.getHigh());
+                System.out.printf("Low: %,.2f \n",stock.getLow());
+                System.out.printf("Current: %,.2f \n", stock.getCurrent());
+                System.out.printf("Volume: %,.2f \n",stock.getVolume());
 
             }
         }while(Answer!="EXIT");
         System.out.println("You chose to exit, have a nice day <3");
     }
-    public static String[] stockInformationAPI(String stockName) throws IOException {
-        String StockInformation[] = new String[5];
+    public static double[] stockInformationAPI(String stockName) throws IOException {
+        double StockInformation[] = new double[5];
         //https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&outputsize=full&apikey=demo
-        String urlName = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol="+stockName+"&outputsize=full&apikey=UV3XPIKPFL8VOWIA";
+        String urlName = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol="+stockName+"&outputsize=full&apikey=UV3XPIKPFL8VOWIA&datatype=csv";
         URL url = new URL(urlName);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
 
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("param1", "val");
-
-        con.setDoOutput(true);
-        DataOutputStream out = new DataOutputStream(con.getOutputStream());
-        out.writeBytes(ParameterStringBuilder.getParamsString(parameters));
-        out.flush();
-        out.close();
-
         con.setConnectTimeout(5000);
         con.setReadTimeout(5000);
 
-        //parameters.forEach((key, value) -> System.out.println(key + " : " + value));
+        int status = con.getResponseCode();
 
-        //Temp data:
-        StockInformation[0] = "0.0";
-        StockInformation[1] = "0.0";
-        StockInformation[2] = "0.0";
-        StockInformation[3] = "0.0";
-        StockInformation[4] = "0.0";
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuilder content = new StringBuilder();
+        while ((inputLine = in.readLine()) != null) {
+            content.append(inputLine).append(",").append("\n");
+        }
+        in.close();
+        //System.out.println(content.toString());
+
+        Reader streamReader = null;
+
+        if (status > 299) {
+            streamReader = new InputStreamReader(con.getErrorStream());
+        } else {
+            streamReader = new InputStreamReader(con.getInputStream());
+        }
+        con.disconnect();
+
+        StockInformation = parseWebData(content.toString());
+        //Temp data
 
         return StockInformation;
     }
@@ -85,5 +91,21 @@ public class Main {
                     ? resultString.substring(0, resultString.length() - 1)
                     : resultString;
         }
+    }
+
+    public static double[] parseWebData(String info) {
+        //7)open
+        //8)high
+        //9)low
+        //10)close
+        //11)volume
+
+        double tempData[] = {0.0, 0.0, 0.0, 0.0, 0.0};
+        String[] temp = info.split(",");
+        for(int i = 7; i <12; i++){
+            tempData[i-7] = Float.parseFloat(temp[i]);
+        }
+        return tempData;
+
     }
 }
